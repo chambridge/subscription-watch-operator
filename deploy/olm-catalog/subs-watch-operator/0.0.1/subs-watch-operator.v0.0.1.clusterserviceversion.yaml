@@ -33,7 +33,7 @@ metadata:
     capabilities: Basic Install
     categories: "Monitoring"
     certified: 'false'
-    containerImage: quay.io/repository/chambridge/subs-watch-operator:v0.0.1
+    containerImage: quay.io/repository/chambrid/subs-watch-operator:v0.0.1
     createdAt: 2020-03-26T2:38:59Z
     support: Cost Managment
     repository: https://github.com/chambridge/subscription-watch-operator
@@ -241,7 +241,7 @@ spec:
                 - /usr/local/bin/ao-logs
                 - /tmp/ansible-operator/runner
                 - stdout
-                image: quay.io/chambridge/subs-watch-operator:v0.0.1
+                image: quay.io/chambrid/subs-watch-operator:v0.0.1
                 imagePullPolicy: Always
                 name: ansible
                 resources: {}

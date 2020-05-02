@@ -54,7 +54,7 @@ deploy-operator-quay-user:
 
 deploy-operator-dev-branch:
 	cp deploy/operator.yaml testing/operator.yaml
-	sed -i "" 's|{{ REPLACE_IMAGE }}|quay.io/chambridge/subscription-watch-operator:$(branch)|g' testing/operator.yaml
+	sed -i "" 's|{{ REPLACE_IMAGE }}|quay.io/chambrid/subscription-watch-operator:$(branch)|g' testing/operator.yaml
 	sed -i "" "s?{{ pull_policy|default('Always') }}?Always?g" testing/operator.yaml
 	oc apply -f testing/operator.yaml
 
