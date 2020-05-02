@@ -90,7 +90,7 @@ Note: If you are using `token` authentication, you can disregard the authenticat
 
 ### Creating the dependencies
 
-OpenShift needs to know about the new custom resource definitions that the operator will be watching. Make sure that you are logged into a cluster and run the following command to deploy both the `CostManagment` and `SubscriptionWatchData` CRDs, the authentication secret, service account, role, and role binding to the cluster:
+OpenShift needs to know about the new custom resource definitions that the operator will be watching. Make sure that you are logged into a cluster and run the following command to deploy both the `SubscriptionWatch` and `SubscriptionWatchData` CRDs, the authentication secret, service account, role, and role binding to the cluster:
 
 ```
 make deploy-dependencies
