@@ -4,7 +4,7 @@ kind: Report
 metadata:
   labels:
     subscription-watch: "true"
-  name: sw-cpu-usage-product-integrations-report-{{ current_year_month }}
+  name: sw-cpu-usage-product-integrations-{{ current_year_month }}
 spec:
   query: sw-cpu-usage-product-integrations
   reportingEnd: '{{ report_end_year }}-{{ report_end_month }}-02T00:00:00Z'
