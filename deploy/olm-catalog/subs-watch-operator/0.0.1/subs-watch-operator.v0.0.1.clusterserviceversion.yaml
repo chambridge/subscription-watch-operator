@@ -33,7 +33,7 @@ metadata:
     capabilities: Basic Install
     categories: "Monitoring"
     certified: 'false'
-    containerImage: quay.io/repository/chambrid/subs-watch-operator:v0.0.1
+    containerImage: quay.io/chambrid/subscription-watch-operator:latest
     createdAt: 2020-03-26T2:38:59Z
     support: Cost Managment
     repository: https://github.com/chambridge/subscription-watch-operator
@@ -44,12 +44,12 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - description: Cost Management resource
+    - description: Subscription Watch resource
       displayName: SubscriptionWatch
       kind: SubscriptionWatch
       name: SubscriptionWatchs.subscription-watch.openshift.io
       version: v1alpha1
-    - description: Cost Management Data resource
+    - description: Subscription Watch Data resource
       displayName: SubscriptionWatchData
       kind: SubscriptionWatchData
       name: subs-watch-data.subscription-watch-data.openshift.io
@@ -241,7 +241,7 @@ spec:
                 - /usr/local/bin/ao-logs
                 - /tmp/ansible-operator/runner
                 - stdout
-                image: quay.io/chambrid/subs-watch-operator:v0.0.1
+                image: quay.io/chambrid/subscription-watch-operator:latest
                 imagePullPolicy: Always
                 name: ansible
                 resources: {}
@@ -264,7 +264,7 @@ spec:
                   value: subs-watch-operator
                 - name: ANSIBLE_GATHERING
                   value: explicit
-                image: quay.io/chambridge/subs-watch-operator:v0.0.1
+                image: quay.io/chambrid/subscription-watch-operator:latest
                 imagePullPolicy: Always
                 name: operator
                 resources: {}

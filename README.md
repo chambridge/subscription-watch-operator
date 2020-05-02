@@ -218,6 +218,6 @@ To release a new version of the `subs-watch-operator`, you must first update the
 
 1. To update the bundle, view the operator-sdk olm-catalog [documentation](https://docs.openshift.com/container-platform/4.1/applications/operator_sdk/osdk-generating-csvs.html#osdk-how-csv-gen-works_osdk-generating-csvs) on generating and updating ClusterServiceVersions (CSVs).
 
-2. After all changes to the operator have been merged into master, cut a release with the new version tag. This will kick start an quay image build with the new release version [here](https://quay.io/repository/chambrid/subs-watch-operator?tab=tags). Use this image to replace the previous image in the ClusterServiceVersion.
+2. After all changes to the operator have been merged into master, cut a release with the new version tag. This will kick start an quay image build with the new release version [here](https://quay.io/chambrid/subscription-watch-operator?tab=tags). Use this image to replace the previous image in the ClusterServiceVersion.
 
 3. After generating the bundle, submit a pull request with the updated bundle to the `community-operators` repo. Before submitting your pull request make sure that you have read and completed the community [contributing guidelines](https://github.com/operator-framework/community-operators/blob/master/docs/contributing.md) and [checklist](https://github.com/operator-framework/community-operators/blob/master/docs/pull_request_template.md).
