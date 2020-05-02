@@ -1,0 +1,39 @@
+---
+apiVersion: metering.openshift.io/v1alpha1
+kind: ReportQuery
+metadata:
+  labels:
+    subscription-watch: "true"
+  name: sw-cpu-usage-product-lookback
+spec:
+  view:
+    disabled: true
+  columns:
+    - name: pod
+      type: varchar
+      unit: kubernetes_pod
+    - name: namespace
+      type: varchar
+      unit: kubernetes_namespace
+    - name: product
+      type: varchar
+    - name: used_cores
+      type: double
+    - name: interval_start
+      type: timestamp
+      unit: date
+  inputs:
+    - name: ReportingStart
+      type: time
+    - default: sw-cpu-usage-product-lookback
+      name: SubscriptionWatchProductUsageReportName
+      type: Report
+  query: |
+    SELECT
+      pod,
+      namespace,
+      product,
+      used_cores,
+      interval_start
+    FROM {| .Report.Inputs.SubscriptionWatchProductUsageReportName | reportTableName |}
+    WHERE {| .Report.Inputs.SubscriptionWatchProductUsageReportName | reportTableName |}.interval_start >= timestamp '{| default .Report.ReportingStart .Report.Inputs.ReportingStart | prestoTimestamp |}' - interval '3' day

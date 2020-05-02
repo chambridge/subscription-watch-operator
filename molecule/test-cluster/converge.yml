@@ -1,0 +1,76 @@
+---
+
+- name: Converge
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_python_interpreter: '{{ ansible_playbook_python }}'
+    deploy_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/deploy"
+    image_name: subscription-watch.openshift.io/subs-watch-operator:testing
+    custom_resource: "{{ lookup('file', '/'.join([deploy_dir,
+      'crds/subs_watch_cr.yaml'])) | from_yaml
+    }}"
+    sw_data_cr: "{{ lookup('file', '/'.join([deploy_dir,
+      'crds/subs_watch_data_cr.yaml'])) | from_yaml }}"
+  tasks:
+    - name: Create the subscription-watch.openshift.io/v1alpha1.SubscriptionWatch
+      k8s:
+        namespace: '{{ namespace }}'
+        definition: "{{ lookup('file', '/'.join([deploy_dir,
+          'crds/subs_watch_cr.yaml']))
+        }}"
+
+    - name: Get the newly created Custom Resource
+      debug:
+        msg: "{{ lookup('k8s', group='subscription-watch.openshift.io',
+          api_version='v1alpha1',
+          kind='SubscriptionWatch', namespace=namespace,
+          resource_name=custom_resource.metadata.name)
+        }}"
+
+    - name: Wait 2m for reconciliation to run
+      k8s_info:
+        api_version: 'v1alpha1'
+        kind: 'SubscriptionWatch'
+        namespace: '{{ namespace }}'
+        name: '{{ custom_resource.metadata.name }}'
+      register: reconcile_cr
+      until:
+        - "'Successful' in (reconcile_cr |
+          json_query('resources[].status.conditions[].reason'))"
+      delay: 12
+      retries: 10
+
+    - name: Create the subscription-watch-data.openshift.io/v1alpha1.SubscriptionWatchData
+      k8s:
+        state: present
+        namespace: '{{ namespace }}'
+        definition: '{{ sw_data_cr }}'
+
+    - name: debug subs-watch data custom resource
+      ignore_errors: yes
+      failed_when: false
+      debug:
+        var: debug_cr
+      vars:
+        debug_cr: '{{ lookup("k8s",
+          kind=sw_data_cr.kind,
+          api_version=sw_data_cr.apiVersion,
+          namespace=namespace,
+          resource_name=sw_data_cr.metadata.name
+        )}}'
+
+    - name: Wait 2m for reconciliation to complete for collect
+      k8s_info:
+        api_version: '{{ sw_data_cr.apiVersion }}'
+        kind: '{{ sw_data_cr.kind }}'
+        namespace: '{{ namespace }}'
+        name: '{{ sw_data_cr.metadata.name }}'
+      register: sw_data_cr
+      until:
+        - "'Successful' in (sw_data_cr |
+          json_query('resources[].status.conditions[].reason'))"
+      delay: 12
+      retries: 10
+
+- import_playbook: '{{ playbook_dir }}/../default/asserts.yml'

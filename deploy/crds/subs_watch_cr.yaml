@@ -1,0 +1,13 @@
+---
+
+apiVersion: subscription-watch.openshift.io/v1alpha1
+kind: SubscriptionWatch
+metadata:
+  name: subs-watch-setup
+spec:
+  clusterID: 'cluster-id-placeholder'
+  reporting_operator_token_name: 'reporting-operator-token-placeholder'
+  validate_cert: 'false'
+  authentication_secret_name: 'auth-secret-name-placeholder'
+  authentication: 'token'
+  ingress_url: 'https://cloud.redhat.com/api/ingress/v1/upload'

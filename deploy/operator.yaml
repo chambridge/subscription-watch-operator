@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subs-watch-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: subs-watch-operator
+  template:
+    metadata:
+      labels:
+        name: subs-watch-operator
+    spec:
+      serviceAccountName: subs-watch-operator
+      containers:
+        - name: ansible
+          command:
+            - /usr/local/bin/ao-logs
+            - /tmp/ansible-operator/runner
+            - stdout
+            # Replace this with the built image name
+          image: "{{ REPLACE_IMAGE }}"
+          imagePullPolicy: "{{ pull_policy|default('Always') }}"
+          volumeMounts:
+            - mountPath: /tmp/ansible-operator/runner
+              name: runner
+              readOnly: true
+            - mountPath: /tmp/subs-watch-operator-collect
+              name: subs-watch-operator
+        - name: operator
+          # Replace this with the built image name
+          image: "{{ REPLACE_IMAGE }}"
+          imagePullPolicy: "{{ pull_policy|default('Always') }}"
+          volumeMounts:
+            - mountPath: /tmp/ansible-operator/runner
+              name: runner
+            - mountPath: /tmp/subs-watch-operator-collect
+              name: subs-watch-operator
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "subs-watch-operator"
+            - name: ANSIBLE_GATHERING
+              value: explicit
+      volumes:
+        - name: runner
+          emptyDir: {}
+        - name: subs-watch-operator
+  volumeClaimTemplates:
+    - metadata:
+        name: subs-watch-operator
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi

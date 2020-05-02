@@ -1,0 +1,24 @@
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: subs-watch-data.subscription-watch-data.openshift.io
+spec:
+  group: subscription-watch-data.openshift.io
+  version: v1alpha1
+  names:
+    kind: SubscriptionWatchData
+    listkind: SubscriptionWatchDataList
+    plural: subs-watch-data
+    singular: subs-watch-datum
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      type: object
+      x-kubernetes-preserve-unknown-fields: true
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true

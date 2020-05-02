@@ -1,0 +1,72 @@
+---
+- name: Search for metering resources
+  k8s_info:
+    api_version: v1
+    kind: MeteringConfig
+    namespace: "{{ namespace }}"
+  register: metering_objects
+
+- name: Ensure metering has been configured
+  fail:
+    msg: 'Metering has not been configured.'
+  when: not metering_objects.resources
+
+- name: Obtain subs-watch-setup info
+  k8s_info:
+    api_version: subscription-watch.openshift.io/v1alpha1
+    kind: SubscriptionWatch
+    namespace: "{{ namespace }}"
+    name: subs-watch-setup
+  register: subs_watch_setup
+
+- name: Set current_day
+  set_fact:
+    current_day: "{{ subs_watch_setup.resources[0].spec.current_day | int }}"
+  when: subs_watch_setup.resources
+  ignore_errors: true
+
+- name: Set current_month
+  set_fact:
+    current_month: "{{ subs_watch_setup.resources[0].spec.current_month | int }}"
+  when: subs_watch_setup.resources
+  ignore_errors: true
+
+- name: Set current_year
+  set_fact:
+    current_year: "{{ subs_watch_setup.resources[0].spec.current_year | int }}"
+  when: subs_watch_setup.resources
+  ignore_errors: true
+
+- name: Create datasources and reportqueries
+  k8s:
+    namespace: "{{ namespace }}"
+    state: present
+    src: "{{ item }}"
+  with_fileglob:
+    - "files/sw*"
+
+- name: Manage current month reports
+  import_tasks: reports.yml
+  vars:
+    input_month: '{{ current_month }}'
+    input_year: '{{ current_year }}'
+    month_delta: 0
+    state: 'present'
+
+- name: Manage next month reports
+  import_tasks: reports.yml
+  vars:
+    input_month: '{{ current_month }}'
+    input_year: '{{ current_year }}'
+    month_delta: 1
+    state: 'present'
+  when: (current_day | int)  > 24
+
+- name: Manage previous month reports
+  import_tasks: reports.yml
+  vars:
+    input_month: '{{ current_month }}'
+    input_year: '{{ current_year }}'
+    month_delta: -1
+    state: 'absent'
+  when: (current_day | int)  < 3

@@ -1,0 +1,7 @@
+---
+
+channels:
+  - currentCSV: subs-watch-operator.v0.0.1
+    name: alpha
+defaultChannel: alpha
+packageName: subs-watch-operator

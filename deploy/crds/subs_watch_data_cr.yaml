@@ -1,0 +1,6 @@
+---
+
+apiVersion: subscription-watch-data.openshift.io/v1alpha1
+kind: SubscriptionWatchData
+metadata:
+  name: subs-watch-data-example

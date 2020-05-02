@@ -1,0 +1,13 @@
+---
+# initial setup steps
+- version: v1alpha1
+  group: subscription-watch.openshift.io
+  kind: SubscriptionWatch
+  role: /opt/ansible/roles/setup
+
+# collect the reports
+- version: v1alpha1
+  group: subscription-watch-data.openshift.io
+  kind: SubscriptionWatchData
+  role: /opt/ansible/roles/collect
+  reconcilePeriod: 360m
