@@ -140,7 +140,7 @@
     state: '{{ state }}'
     src: '{{ item }}'
   with_fileglob:
-    - '{{ template_path }}/cm*'
+    - '{{ template_path }}/sw*'
 
 - name: Remove template files
   file:
