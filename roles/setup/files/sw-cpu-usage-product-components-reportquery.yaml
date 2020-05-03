@@ -52,7 +52,7 @@ spec:
           L.labels['pod'] as pod,
           L.labels['namespace'] as namespace,
           L.labels['label_com_redhat_product_name'] as product,
-          COALESCE(element_at(L.labels, 'label_syndesis_io_type'), IF(element_at(L.labels, 'label_camel_apache_org_integration')) IS NOT NULL, 'integration'), 'internal') as component,
+          COALESCE(element_at(L.labels, 'label_syndesis_io_type'), IF(element_at(L.labels, 'label_camel_apache_org_integration') IS NOT NULL, 'integration'), 'internal') as component,
           date_trunc('hour', L."timestamp") as interval_start
       FROM {| dataSourceTableName .Report.Inputs.SubscriptionWatchPodLabelsDataSourceName |} as L
       WHERE L."timestamp" >= timestamp '{| default .Report.ReportingStart .Report.Inputs.ReportingStart | prestoTimestamp |}'
