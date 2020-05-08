@@ -4,7 +4,7 @@ kind: ReportQuery
 metadata:
   labels:
     subscription-watch: "true"
-  name: sw-cpu-usage-product-components-lookback
+  name: sw-core-usage-product-lookback
 spec:
   view:
     disabled: true
@@ -12,16 +12,10 @@ spec:
     - name: pod
       type: varchar
       unit: kubernetes_pod
-    - name: project
+    - name: namespace
       type: varchar
       unit: kubernetes_namespace
-    - name: company
-      type: varchar
     - name: product
-      type: varchar
-    - name: component
-      type: varchar
-    - name: component_type
       type: varchar
     - name: used_cores
       type: double
@@ -31,19 +25,15 @@ spec:
   inputs:
     - name: ReportingStart
       type: time
-    - default: sw-cpu-usage-product-components
+    - default: sw-core-usage-product-lookback
       name: SubscriptionWatchProductUsageReportName
       type: Report
   query: |
     SELECT
       pod,
-      project,
-      company,
+      namespace,
       product,
-      component,
-      component_type,
       used_cores,
       interval_start
     FROM {| .Report.Inputs.SubscriptionWatchProductUsageReportName | reportTableName |}
     WHERE {| .Report.Inputs.SubscriptionWatchProductUsageReportName | reportTableName |}.interval_start >= timestamp '{| default .Report.ReportingStart .Report.Inputs.ReportingStart | prestoTimestamp |}' - interval '3' day
-    ORDER BY interval_start, company, product, component_type, project

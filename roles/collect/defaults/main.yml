@@ -7,8 +7,8 @@ ocp_validate_cert: 'true'
 ocp_cluster_id: ''
 reporting_operator_token_name: ''
 collect_reports:
-  - 'sw-cpu-usage-product-lookback-'
-  - 'sw-cpu-usage-product-integrations-lookback-'
+  - 'sw-core-usage-product-lookback-'
+  - 'sw-core-usage-product-integrations-lookback-'
 collect_download_path: '/tmp/subs-watch-operator-collect'
 collect_delete_after: 'true'
 collect_ocp_report_timeout: 60

@@ -4,7 +4,7 @@ kind: ReportQuery
 metadata:
   labels:
     subscription-watch: "true"
-  name: sw-cpu-usage-product-integrations
+  name: sw-core-usage-product-integrations
 spec:
   columns:
     - name: pod

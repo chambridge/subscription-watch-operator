@@ -4,12 +4,12 @@ kind: Report
 metadata:
   labels:
     subscription-watch: "true"
-  name: sw-cpu-usage-product-components-lookback-{{ current_year_month }}
+  name: sw-core-usage-product-integrations-lookback-{{ current_year_month }}
 spec:
-  query: sw-cpu-usage-product-components-lookback
+  query: sw-core-usage-product-lookback
   inputs:
     - name: SubscriptionWatchProductUsageReportName
-      value: sw-cpu-usage-product-components-{{ current_year_month }}
+      value: sw-core-usage-product-integrations-{{ current_year_month }}
   reportingEnd: '{{ report_end_year }}-{{ report_end_month }}-02T00:00:00Z'
   schedule:
     period: hourly
